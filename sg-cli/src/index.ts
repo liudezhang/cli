@@ -1,10 +1,10 @@
 #! /usr/bin/env node
-import { bgBlueBright } from "chalk"
-import { Command } from "commander"
-import { textSync } from "figlet"
-import inquirer from "inquirer"
-import ora from "ora"
-import packageJson from "../package.json"
+import chalk from "chalk";
+import { Command } from "commander";
+import { textSync } from "figlet";
+import inquirer from "inquirer";
+import ora from "ora";
+import packageJson from "../package.json";
 
 // const choseQuestion = async () => {
 //   const { list } = await inquirer.prompt([
@@ -17,7 +17,7 @@ import packageJson from "../package.json"
 //   ])
 
 //   console.log(
-//     bgBlueBright(textSync("Hello World", { horizontalLayout: "full" }))
+//     chalk.bgBlueBright(textSync("Hello World", { horizontalLayout: "full" }))
 //   )
 // }
 
@@ -44,22 +44,22 @@ import packageJson from "../package.json"
 // program.parse(process.argv) // 解析命令行参数
 
 const loading = async <T extends string>(msg: T): Promise<T> => {
-  const spinner = ora(msg)
-  spinner.start()
+  const spinner = ora(msg);
+  spinner.start();
   try {
     const res = await new Promise<T>((resolve) => {
       setTimeout(() => {
-        resolve(msg)
-      }, 2000)
-    })
-    spinner.succeed("加载成功")
-    return Promise.resolve(res)
+        resolve(msg);
+      }, 2000);
+    });
+    spinner.succeed("加载成功");
+    return Promise.resolve(res);
   } catch (error) {
-    spinner.fail("加载失败")
-    return Promise.reject(error)
+    spinner.fail("加载失败");
+    return Promise.reject(error);
   }
-}
+};
 
 loading("加载中").then((res) => {
-  console.log("res", res)
-})
+  console.log("res", res);
+});
