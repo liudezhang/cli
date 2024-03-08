@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "npm run clear && tsc && tsc-alias",
+    "clear": "rimraf bin",
+    "watch": "npm run clear && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
   },
   "bin": {
     "sg": "/bin/src/index.js"
@@ -16,8 +17,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/figlet": "^1.5.8",
-    "@types/inquirer": "^9.0.7",
+    "@types/inquirer": "^8.2.10",
     "@types/node": "^20.11.24",
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
@@ -26,7 +29,8 @@
     "download-git-repo": "^3.0.2",
     "figlet": "^1.7.0",
     "fs-extra": "^11.2.0",
-    "inquirer": "^9.2.15",
-    "ora": "^8.0.1"
+    "inquirer": "^8.2.6",
+    "ora": "^8.0.1",
+    "tsc-alias": "^1.8.8"
   }
 }

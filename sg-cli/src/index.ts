@@ -1,65 +1,30 @@
 #! /usr/bin/env node
-import chalk from "chalk";
+
+import fs from "fs";
+
 import { Command } from "commander";
-import { textSync } from "figlet";
-import inquirer from "inquirer";
-import ora from "ora";
-import packageJson from "../package.json";
+import commands from "./commands/index.js";
+const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 
-// const choseQuestion = async () => {
-//   const { list } = await inquirer.prompt([
-//     {
-//       type: "list",
-//       name: "list",
-//       message: "请选择一个你喜欢的颜色",
-//       choices: ["red", "green", "blue"],
-//     },
-//   ])
+const program = new Command();
 
-//   console.log(
-//     chalk.bgBlueBright(textSync("Hello World", { horizontalLayout: "full" }))
-//   )
-// }
+program
+  .name(packageJson.name)
+  .version(packageJson.version)
+  .description(packageJson.description)
+  .helpOption("-h, --help", "显示帮助信息")
+  .usage("<command> [options]");
 
-// choseQuestion().then((res) => {
-//   console.log("选择完毕", res)
-// })
-
-// const program = new Command()
-
-// program
-//   .name(packageJson.name)
-//   .description(packageJson.description)
-//   .version(packageJson.version)
-//   .helpOption("-h, --help", "sg-cli 帮助文档")
-
-// // create 命令
-// program
-//   .command("create <name>")
-//   .description("创建一个新项目")
-//   .action((name) => {
-//     console.log("create", name)
-//   })
-
-// program.parse(process.argv) // 解析命令行参数
-
-const loading = async <T extends string>(msg: T): Promise<T> => {
-  const spinner = ora(msg);
-  spinner.start();
-  try {
-    const res = await new Promise<T>((resolve) => {
-      setTimeout(() => {
-        resolve(msg);
-      }, 2000);
-    });
-    spinner.succeed("加载成功");
-    return Promise.resolve(res);
-  } catch (error) {
-    spinner.fail("加载失败");
-    return Promise.reject(error);
-  }
-};
-
-loading("加载中").then((res) => {
-  console.log("res", res);
+Object.keys(commands).forEach((command: string) => {
+  const value = commands[command]; // 获取命令的值
+  const cmd = program.command(command); // 创建命令
+  cmd.description(value.description); // 设置命令描述
+  // 设置命令选项
+  value.options.forEach((option) => {
+    cmd.option(option.cmd, option.description);
+  });
+  // 设置命令执行动作
+  cmd.action(value.actions);
 });
+
+program.parse();
