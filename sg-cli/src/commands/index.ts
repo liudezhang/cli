@@ -1,4 +1,5 @@
-import commandCreate from "./create/index.js";
+import loading from "@/utils/loading";
+import commandCreate from "./create/index";
 
 interface ICommands {
   [key: string]: {
@@ -21,6 +22,16 @@ const commands: ICommands = {
       },
     ],
     actions: commandCreate,
+  },
+  test: {
+    description: "测试",
+    options: [],
+    actions: async () => {
+      loading.start("测试");
+      await new Promise((res) => setTimeout(res, 1000));
+      loading.succeed("测试成功");
+      console.log("测试");
+    },
   },
 };
 

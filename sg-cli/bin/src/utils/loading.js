@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9,20 +10,24 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import ora from "ora";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ora_1 = __importDefault(require("ora"));
 var Loading = (function () {
     function Loading(defaultOptions) {
         if (defaultOptions === void 0) { defaultOptions = {}; }
         this.defaultOptions = defaultOptions;
-        this.spinner = ora(defaultOptions);
+        this.spinner = (0, ora_1.default)(defaultOptions);
     }
     Loading.prototype.start = function (textOrOptions, customOptions) {
         if (typeof textOrOptions === "string") {
-            this.spinner = ora(__assign(__assign({}, this.defaultOptions), customOptions));
+            this.spinner = (0, ora_1.default)(__assign(__assign({}, this.defaultOptions), customOptions));
             this.spinner.start(textOrOptions);
         }
         else {
-            this.spinner = ora(__assign(__assign({}, this.defaultOptions), textOrOptions));
+            this.spinner = (0, ora_1.default)(__assign(__assign({}, this.defaultOptions), textOrOptions));
             this.spinner.start();
         }
         return new Promise(function (resolve) {
@@ -49,4 +54,4 @@ var Loading = (function () {
     };
     return Loading;
 }());
-export default new Loading();
+exports.default = new Loading();

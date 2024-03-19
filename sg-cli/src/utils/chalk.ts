@@ -1,5 +1,7 @@
 import chalk from "chalk";
 
+type ChalkFnType = keyof Chalk;
+
 class Chalk {
   constructor() {}
 
@@ -16,7 +18,7 @@ class Chalk {
   }
 
   info(text: string) {
-    return chalk.blue(text);
+    return chalk.hex("#c5c5c5")(text);
   }
 
   underline(text: string) {
@@ -25,6 +27,19 @@ class Chalk {
 
   bold(text: string) {
     return chalk.bold(text);
+  }
+
+  dim(text: string) {
+    return chalk.dim(text);
+  }
+
+  log(text: string, type: ChalkFnType = "info") {
+    console.log(this[type](text));
+  }
+
+  logWithTime(text: string, type: ChalkFnType = "info") {
+    const time = new Date().toLocaleTimeString();
+    console.log(this[type](`[${time}] ${text}`));
   }
 }
 
