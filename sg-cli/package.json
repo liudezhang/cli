@@ -4,8 +4,9 @@
   "description": "快速创建项目",
   "main": "index.js",
   "scripts": {
-    "build": "npm run clear && tsc && tsc-alias",
+    "lint": "eslint --ext .ts . --fix && prettier --write .",
     "clear": "rimraf bin",
+    "build": "npm run clear && tsc && tsc-alias",
     "watch": "npm run clear && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
   },
   "bin": {
@@ -19,15 +20,17 @@
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^8.2.10",
     "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "prettier": "3.2.5",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^12.0.0",
-    "download-git-repo": "^3.0.2",
-    "figlet": "^1.7.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6",
     "ora": "^5.4.1",

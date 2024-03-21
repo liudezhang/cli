@@ -1,56 +1,51 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var fs_extra_1 = __importDefault(require("fs-extra"));
+import fs from "fs-extra";
 var Fs = (function () {
     function Fs() {
-        this.fsExtra = fs_extra_1.default;
+        this.fsExtra = fs;
     }
     Fs.prototype.readFileSync = function (path, encoding) {
         if (encoding === void 0) { encoding = "utf-8"; }
-        return fs_extra_1.default.readFileSync(path, { encoding: encoding });
+        return fs.readFileSync(path, { encoding: encoding });
     };
     Fs.prototype.writeFileSync = function (path, data, encoding) {
         if (encoding === void 0) { encoding = "utf-8"; }
-        return fs_extra_1.default.writeFileSync(path, data, { encoding: encoding });
+        return fs.writeFileSync(path, data, { encoding: encoding });
     };
     Fs.prototype.existsSync = function (path) {
-        return fs_extra_1.default.existsSync(path);
+        return fs.existsSync(path);
     };
     Fs.prototype.copyFileSync = function (src, dest) {
-        return fs_extra_1.default.copyFileSync(src, dest);
+        return fs.copyFileSync(src, dest);
     };
     Fs.prototype.mkdirSync = function (path) {
-        return fs_extra_1.default.mkdirSync(path);
+        return fs.mkdirSync(path);
     };
     Fs.prototype.readdirSync = function (path, options, callback) {
-        return fs_extra_1.default.readdir(path, options, callback);
+        return fs.readdir(path, options, callback);
     };
     Fs.prototype.rmdirSync = function (path) {
-        return fs_extra_1.default.rmdirSync(path, { recursive: true });
+        return fs.rmdirSync(path, { recursive: true });
     };
     Fs.prototype.renameSync = function (oldPath, newPath) {
-        return fs_extra_1.default.renameSync(oldPath, newPath);
+        return fs.renameSync(oldPath, newPath);
     };
     Fs.prototype.rmSync = function (path, options) {
-        return fs_extra_1.default.rmSync(path, options);
+        return fs.rmSync(path, options);
     };
     Fs.prototype.copySync = function (src, dest, options) {
         if (options === void 0) { options = {}; }
-        return fs_extra_1.default.copySync(src, dest, options);
+        return fs.copySync(src, dest, options);
     };
     Fs.prototype.moveSync = function (src, dest, options) {
         if (options === void 0) { options = {}; }
-        return fs_extra_1.default.moveSync(src, dest, options);
+        return fs.moveSync(src, dest, options);
     };
     Fs.prototype.removeSync = function (path) {
-        return fs_extra_1.default.removeSync(path);
+        return fs.removeSync(path);
     };
     Fs.prototype.remove = function (path) {
-        return fs_extra_1.default.remove(path);
+        return fs.remove(path);
     };
     return Fs;
 }());
-exports.default = new Fs();
+export default new Fs();

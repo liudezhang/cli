@@ -1,0 +1,15 @@
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+# Ignore the build directory
+build/
+bin/
+dist/
+
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+.editorconfig

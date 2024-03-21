@@ -1,32 +1,27 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var chalk_1 = __importDefault(require("chalk"));
+import chalk from "chalk";
 var Chalk = (function () {
     function Chalk() {
     }
     Chalk.prototype.success = function (text) {
-        return chalk_1.default.green(text);
+        return chalk.green(text);
     };
     Chalk.prototype.error = function (text) {
-        return chalk_1.default.red(text);
+        return chalk.red(text);
     };
     Chalk.prototype.warning = function (text) {
-        return chalk_1.default.yellow(text);
+        return chalk.yellow(text);
     };
     Chalk.prototype.info = function (text) {
-        return chalk_1.default.hex("#c5c5c5")(text);
+        return chalk.hex("#c5c5c5")(text);
     };
     Chalk.prototype.underline = function (text) {
-        return chalk_1.default.underline(text);
+        return chalk.underline(text);
     };
     Chalk.prototype.bold = function (text) {
-        return chalk_1.default.bold(text);
+        return chalk.bold(text);
     };
     Chalk.prototype.dim = function (text) {
-        return chalk_1.default.dim(text);
+        return chalk.dim(text);
     };
     Chalk.prototype.log = function (text, type) {
         if (type === void 0) { type = "info"; }
@@ -39,4 +34,4 @@ var Chalk = (function () {
     };
     return Chalk;
 }());
-exports.default = new Chalk();
+export default new Chalk();

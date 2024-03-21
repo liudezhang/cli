@@ -1,15 +1,15 @@
-import loading from "@/utils/loading";
-import commandCreate from "./create/index";
+import loading from "@/utils/loading"
+import commandCreate from "./create/index"
 
 interface ICommands {
   [key: string]: {
-    description: string;
+    description: string
     options: {
-      cmd: string;
-      description: string;
-    }[];
-    actions: (...args: any[]) => void;
-  };
+      cmd: string
+      description: string
+    }[]
+    actions: (...args: any[]) => void
+  }
 }
 
 const commands: ICommands = {
@@ -27,12 +27,12 @@ const commands: ICommands = {
     description: "测试",
     options: [],
     actions: async () => {
-      loading.start("测试");
-      await new Promise((res) => setTimeout(res, 1000));
-      loading.succeed("测试成功");
-      console.log("测试");
+      loading.start("测试")
+      await new Promise((res) => setTimeout(res, 1000))
+      loading.succeed("测试成功")
+      console.log("测试")
     },
   },
-};
+}
 
-export default commands;
+export default commands

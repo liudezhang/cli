@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,13 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var chalk_1 = __importDefault(require("../utils/chalk"));
-var util_1 = require("util");
-var exec = (0, util_1.promisify)(require("child_process").exec);
+import chalk from "../utils/chalk";
+import { promisify } from "util";
+var exec = promisify(require("child_process").exec);
 var osPlatform = process.platform;
 function isRoot() {
     return process.geteuid && process.geteuid() === 0;
@@ -65,7 +60,7 @@ function isAdmin() {
         });
     });
 }
-function default_1() {
+export default function () {
     return __awaiter(this, void 0, void 0, function () {
         var isAdministrator, _a;
         return __generator(this, function (_b) {
@@ -80,10 +75,9 @@ function default_1() {
                     _b.label = 3;
                 case 3:
                     isAdministrator = _a;
-                    !isAdministrator && chalk_1.default.log("请使用管理员权限运行", "error");
+                    !isAdministrator && chalk.log("请使用管理员权限运行", "error");
                     return [2, isAdministrator];
             }
         });
     });
 }
-exports.default = default_1;
