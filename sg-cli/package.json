@@ -24,7 +24,7 @@
     "bin"
   ],
   "author": "ldz",
-  "license": "ISC",
+  "license": "",
   "devDependencies": {
     "@babel/cli": "^7.24.1",
     "@babel/core": "^7.24.3",
