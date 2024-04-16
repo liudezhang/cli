@@ -1,57 +1,46 @@
-import chalk from "@/utils/chalk"
-import fs from "@/utils/fs"
 import { ExecException, exec, execSync } from "child_process"
 import inquirer from "inquirer"
 
 import { IProjectConfig, projectDir, projectGit } from "@/config/projectMap"
 import loading from "@/utils/loading"
+import chalk from "@/utils/chalk"
+import fs from "@/utils/fs"
 
 export default async function (projectName: string, cmd: any) {
-  /* ---------------------------------- 前置校验 ---------------------------------- */
-  function createCheck(): boolean | { isCreate: boolean; force: boolean } {
+  try {
     // 1. 检查项目名是否合法
     // 项目名只能包含字母、数字、下划线、中划线 必须以字母开头
     const reg = /^[a-zA-Z][a-zA-Z0-9_-]*[a-zA-Z0-9]$/
     if (!reg.test(projectName)) {
       chalk.log("项目名不合法", "error")
-      return false
-    }
-
-    // 2. 检查项目名是否已存在
-    const isExists = fs.existsSync(projectName)
-    if (isExists) {
-      chalk.log("项目已存在", "error")
-
-      // 3. 检查是否强制创建
-      if (cmd.force) {
-        chalk.log("强制创建项目", "warning")
-        return {
-          isCreate: true,
-          force: true,
-        }
-      } else {
-        chalk.log("请更换项目名", "info")
-        return false
-      }
-    } else {
-      return true
-    }
-  }
-
-  try {
-    const isCreate = createCheck()
-
-    // 项目名不合法或者项目已存在且不强制创建则不创建项目
-    if (
-      !isCreate ||
-      (typeof isCreate === "object" && isCreate.isCreate && !isCreate.force)
-    ) {
       return
     }
 
-    // 项目已存在且强制创建则删除项目
-    if (typeof isCreate === "object" && isCreate.isCreate && isCreate.force) {
-      fs.removeSync(projectName)
+    // 2. 检查项目是否已存在
+    const isExists = fs.existsSync(projectName)
+
+    if (cmd.force) {
+      loading.start("删除 " + projectName + " 项目中")
+      await fs.remove(projectName)
+      loading.succeed("删除 " + projectName + " 项目成功")
+    }
+
+    if (isExists) {
+      const { isCover } = await inquirer.prompt([
+        {
+          name: "isCover",
+          type: "confirm",
+          message: "项目已存在 是否覆盖",
+        },
+      ])
+
+      if (isCover) {
+        loading.start("删除 " + projectName + " 项目中")
+        await fs.remove(projectName)
+        loading.succeed("删除 " + projectName + " 项目成功")
+      } else {
+        return
+      }
     }
 
     /* --------------------------------- 项目创建流程 --------------------------------- */
@@ -65,18 +54,16 @@ export default async function (projectName: string, cmd: any) {
 
     // 判断模板文件是否存在
     if (fs.existsSync(projectDir)) {
-      fs.removeSync(projectDir)
+      // 删除模板文件
+      await fs.remove(projectDir)
     }
 
-    chalk.logWithTime("开始下载模板")
     loading.start("模板下载中", {
       stream: process.stdout,
     })
     const result = await new Promise<ExecException | null>((resolve) =>
       exec(`git clone ${projectGit}`, (error) => resolve(error)),
     )
-    loading.stop()
-    chalk.logWithTime("模板下载完成")
 
     if (result) {
       loading.fail("模板下载失败")
@@ -87,9 +74,11 @@ export default async function (projectName: string, cmd: any) {
     // 获取项目模板文件夹
     const templatePath = `${process.cwd()}\\${projectDir}`
     loading.succeed("模板下载成功")
+    loading.stop()
     const projectJson = fs.readJsonSync(templatePath + "/project.json")
 
-    const { template } = await inquirer.prompt([
+    //  选择模板 和 包管理工具 询问
+    const { template, packageManager, description } = await inquirer.prompt([
       {
         name: "template",
         type: "list",
@@ -103,18 +92,6 @@ export default async function (projectName: string, cmd: any) {
           }
         }),
       },
-    ])
-
-    // 移动模板文件到项目目录
-    fs.moveSync(`${templatePath}\\${template}`, projectPath, {
-      overwrite: true,
-    })
-    chalk.log("项目创建成功", "success")
-    removeProjectDir(projectDir)
-
-    // 3. 安装依赖
-    // 3.1 选择包管理工具
-    const { packageManager } = await inquirer.prompt([
       {
         name: "packageManager",
         type: "list",
@@ -134,9 +111,31 @@ export default async function (projectName: string, cmd: any) {
           },
         ],
       },
+      {
+        name: "description",
+        type: "input",
+        message: "请输入项目描述",
+        default: "",
+      },
     ])
 
-    // 3.2 安装依赖
+    // 3. 安装依赖
+    // 移动模板文件到项目目录
+    fs.moveSync(`${templatePath}\\${template}`, projectPath, {
+      overwrite: true,
+    })
+    removeProjectDir(projectDir)
+
+    //  修改 package.json 文件 并 格式化
+    const packageJsonPath = `${projectPath}\\package.json`
+    const packageJson = fs.readJsonSync(packageJsonPath)
+    const packageScript = Object.keys(packageJson.scripts)
+    packageJson.name = projectName
+    packageJson.version = "1.0.0"
+    packageJson.description = description
+    fs.writeJsonSync(packageJsonPath, packageJson, { spaces: 2 }) // 格式化写入
+
+    // 安装依赖
     chalk.log("开始安装依赖")
     execSync(`cd ${projectName} && git init && ${packageManager} install`, {
       stdio: "inherit", // 打印子进程的输出
@@ -146,6 +145,16 @@ export default async function (projectName: string, cmd: any) {
     // 4. 安装完成
 
     // 5. 打印提示信息
+    chalk.log("项目创建成功", "success")
+    // chalk.log("请执行以下命令启动项目", "info")
+    // console.log(
+    //   chalk.hex("#0ff")(
+    //     [
+    //       `cd ${projectName}`,
+    //       ...packageScript.map((item) => `${packageManager} run ${item}`),
+    //     ].join("\n"),
+    //   ),
+    // )
   } catch (error) {
     console.log(error)
     chalk.log("项目创建失败", "error")

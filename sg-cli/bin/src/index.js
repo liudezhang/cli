@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,24 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { Command } from "commander";
-import commands from "./commands/index";
-import packageJson from "../package.json";
-import isAdministrator from "./utils/isAdministrator";
-var program = new Command();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var commander_1 = require("commander");
+var index_1 = __importDefault(require("./commands/index"));
+var package_json_1 = __importDefault(require("../package.json"));
+var isAdministrator_1 = __importDefault(require("./utils/isAdministrator"));
+var program = new commander_1.Command();
 program
-    .name(packageJson.name)
-    .version(packageJson.version)
-    .description(packageJson.description)
+    .name(package_json_1.default.name)
+    .version(package_json_1.default.version)
+    .description(package_json_1.default.description)
     .helpOption("-h, --help", "显示帮助信息")
     .usage("<command> [options]");
-Object.keys(commands).forEach(function (command) {
-    var value = commands[command];
+Object.keys(index_1.default).forEach(function (command) {
+    var value = index_1.default[command];
     var cmd = program.command(command);
     cmd.hook("preAction", function (thisCommand, actionCommand) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4, isAdministrator()];
+                case 0: return [4, (0, isAdministrator_1.default)()];
                 case 1:
                     if (!(_a.sent())) {
                         process.exit(1);

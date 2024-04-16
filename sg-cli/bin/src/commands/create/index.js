@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,76 +35,81 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import chalk from "../../utils/chalk";
-import fs from "../../utils/fs";
-import { exec, execSync } from "child_process";
-import inquirer from "inquirer";
-import { projectDir, projectGit } from "../../config/projectMap";
-import loading from "../../utils/loading";
-export default function (projectName, cmd) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var child_process_1 = require("child_process");
+var inquirer_1 = __importDefault(require("inquirer"));
+var projectMap_1 = require("../../config/projectMap");
+var loading_1 = __importDefault(require("../../utils/loading"));
+var chalk_1 = __importDefault(require("../../utils/chalk"));
+var fs_1 = __importDefault(require("../../utils/fs"));
+function default_1(projectName, cmd) {
     return __awaiter(this, void 0, void 0, function () {
-        function createCheck() {
-            var reg = /^[a-zA-Z][a-zA-Z0-9_-]*[a-zA-Z0-9]$/;
-            if (!reg.test(projectName)) {
-                chalk.log("项目名不合法", "error");
-                return false;
-            }
-            var isExists = fs.existsSync(projectName);
-            if (isExists) {
-                chalk.log("项目已存在", "error");
-                if (cmd.force) {
-                    chalk.log("强制创建项目", "warning");
-                    return {
-                        isCreate: true,
-                        force: true,
-                    };
-                }
-                else {
-                    chalk.log("请更换项目名", "info");
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
-        }
-        var isCreate, projectPath, result, templatePath, projectJson, template, packageManager, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var reg, isExists, isCover, projectPath, result, templatePath, projectJson, _a, template, packageManager, description, packageJsonPath, packageJson, packageScript, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 4, , 5]);
-                    isCreate = createCheck();
-                    if (!isCreate ||
-                        (typeof isCreate === "object" && isCreate.isCreate && !isCreate.force)) {
+                    _b.trys.push([0, 11, , 12]);
+                    reg = /^[a-zA-Z][a-zA-Z0-9_-]*[a-zA-Z0-9]$/;
+                    if (!reg.test(projectName)) {
+                        chalk_1.default.log("项目名不合法", "error");
                         return [2];
                     }
-                    if (typeof isCreate === "object" && isCreate.isCreate && isCreate.force) {
-                        fs.removeSync(projectName);
-                    }
+                    isExists = fs_1.default.existsSync(projectName);
+                    if (!cmd.force) return [3, 2];
+                    loading_1.default.start("删除 " + projectName + " 项目中");
+                    return [4, fs_1.default.remove(projectName)];
+                case 1:
+                    _b.sent();
+                    loading_1.default.succeed("删除 " + projectName + " 项目成功");
+                    _b.label = 2;
+                case 2:
+                    if (!isExists) return [3, 6];
+                    return [4, inquirer_1.default.prompt([
+                            {
+                                name: "isCover",
+                                type: "confirm",
+                                message: "项目已存在 是否覆盖",
+                            },
+                        ])];
+                case 3:
+                    isCover = (_b.sent()).isCover;
+                    if (!isCover) return [3, 5];
+                    loading_1.default.start("删除 " + projectName + " 项目中");
+                    return [4, fs_1.default.remove(projectName)];
+                case 4:
+                    _b.sent();
+                    loading_1.default.succeed("删除 " + projectName + " 项目成功");
+                    return [3, 6];
+                case 5: return [2];
+                case 6:
                     projectPath = "".concat(process.cwd(), "\\").concat(projectName);
-                    if (fs.existsSync(projectDir)) {
-                        fs.removeSync(projectDir);
-                    }
-                    chalk.logWithTime("开始下载模板");
-                    loading.start("模板下载中", {
+                    if (!fs_1.default.existsSync(projectMap_1.projectDir)) return [3, 8];
+                    return [4, fs_1.default.remove(projectMap_1.projectDir)];
+                case 7:
+                    _b.sent();
+                    _b.label = 8;
+                case 8:
+                    loading_1.default.start("模板下载中", {
                         stream: process.stdout,
                     });
                     return [4, new Promise(function (resolve) {
-                            return exec("git clone ".concat(projectGit), function (error) { return resolve(error); });
+                            return (0, child_process_1.exec)("git clone ".concat(projectMap_1.projectGit), function (error) { return resolve(error); });
                         })];
-                case 1:
-                    result = _a.sent();
-                    loading.stop();
-                    chalk.logWithTime("模板下载完成");
+                case 9:
+                    result = _b.sent();
                     if (result) {
-                        loading.fail("模板下载失败");
+                        loading_1.default.fail("模板下载失败");
                         console.log(result, "模板下载失败");
                         return [2];
                     }
-                    templatePath = "".concat(process.cwd(), "\\").concat(projectDir);
-                    loading.succeed("模板下载成功");
-                    projectJson = fs.readJsonSync(templatePath + "/project.json");
-                    return [4, inquirer.prompt([
+                    templatePath = "".concat(process.cwd(), "\\").concat(projectMap_1.projectDir);
+                    loading_1.default.succeed("模板下载成功");
+                    loading_1.default.stop();
+                    projectJson = fs_1.default.readJsonSync(templatePath + "/project.json");
+                    return [4, inquirer_1.default.prompt([
                             {
                                 name: "template",
                                 type: "list",
@@ -117,15 +123,6 @@ export default function (projectName, cmd) {
                                     };
                                 }),
                             },
-                        ])];
-                case 2:
-                    template = (_a.sent()).template;
-                    fs.moveSync("".concat(templatePath, "\\").concat(template), projectPath, {
-                        overwrite: true,
-                    });
-                    chalk.log("项目创建成功", "success");
-                    removeProjectDir(projectDir);
-                    return [4, inquirer.prompt([
                             {
                                 name: "packageManager",
                                 type: "list",
@@ -145,30 +142,49 @@ export default function (projectName, cmd) {
                                     },
                                 ],
                             },
+                            {
+                                name: "description",
+                                type: "input",
+                                message: "请输入项目描述",
+                                default: "",
+                            },
                         ])];
-                case 3:
-                    packageManager = (_a.sent()).packageManager;
-                    chalk.log("开始安装依赖");
-                    execSync("cd ".concat(projectName, " && git init && ").concat(packageManager, " install"), {
+                case 10:
+                    _a = _b.sent(), template = _a.template, packageManager = _a.packageManager, description = _a.description;
+                    fs_1.default.moveSync("".concat(templatePath, "\\").concat(template), projectPath, {
+                        overwrite: true,
+                    });
+                    removeProjectDir(projectMap_1.projectDir);
+                    packageJsonPath = "".concat(projectPath, "\\package.json");
+                    packageJson = fs_1.default.readJsonSync(packageJsonPath);
+                    packageScript = Object.keys(packageJson.scripts);
+                    packageJson.name = projectName;
+                    packageJson.version = "1.0.0";
+                    packageJson.description = description;
+                    fs_1.default.writeJsonSync(packageJsonPath, packageJson, { spaces: 2 });
+                    chalk_1.default.log("开始安装依赖");
+                    (0, child_process_1.execSync)("cd ".concat(projectName, " && git init && ").concat(packageManager, " install"), {
                         stdio: "inherit",
                     });
-                    chalk.log("依赖安装成功", "success");
-                    return [3, 5];
-                case 4:
-                    error_1 = _a.sent();
+                    chalk_1.default.log("依赖安装成功", "success");
+                    chalk_1.default.log("项目创建成功", "success");
+                    return [3, 12];
+                case 11:
+                    error_1 = _b.sent();
                     console.log(error_1);
-                    chalk.log("项目创建失败", "error");
-                    loading.stop();
-                    removeProjectDir(projectDir);
+                    chalk_1.default.log("项目创建失败", "error");
+                    loading_1.default.stop();
+                    removeProjectDir(projectMap_1.projectDir);
                     process.exit();
-                    return [3, 5];
-                case 5: return [2];
+                    return [3, 12];
+                case 12: return [2];
             }
         });
     });
 }
+exports.default = default_1;
 var removeProjectDir = function (projectName) {
-    fs.remove(process.cwd() + "\\" + projectName).catch(function (error) {
-        chalk.log("删除模板文件失败 请手动删除【" + projectName + "】目录", "error");
+    fs_1.default.remove(process.cwd() + "\\" + projectName).catch(function (error) {
+        chalk_1.default.log("删除模板文件失败 请手动删除【" + projectName + "】目录", "error");
     });
 };

@@ -11,7 +11,6 @@ program
   .version(packageJson.version)
   .description(packageJson.description)
   .helpOption("-h, --help", "显示帮助信息")
-
   .usage("<command> [options]")
 
 Object.keys(commands).forEach((command: string) => {

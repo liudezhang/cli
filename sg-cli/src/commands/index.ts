@@ -30,7 +30,6 @@ const commands: ICommands = {
       loading.start("测试")
       await new Promise((res) => setTimeout(res, 1000))
       loading.succeed("测试成功")
-      console.log("测试")
     },
   },
 }

@@ -12,10 +12,17 @@
     "bin": {
         "sg": "/bin/src/index.js"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "cli",
+        "vue"
+    ],
+    "author": "ldz",
     "license": "ISC",
     "devDependencies": {
+        "@babel/cli": "^7.24.1",
+        "@babel/core": "^7.24.3",
+        "@babel/preset-env": "^7.24.3",
+        "@babel/preset-typescript": "^7.24.1",
         "@types/figlet": "^1.5.8",
         "@types/fs-extra": "^11.0.4",
         "@types/inquirer": "^8.2.10",

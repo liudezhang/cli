@@ -1,21 +1,35 @@
 {
   "name": "sg-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "快速创建项目",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ext .ts . --fix && prettier --write .",
     "clear": "rimraf bin",
     "build": "npm run clear && tsc && tsc-alias",
-    "watch": "npm run clear && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
+    "watch": "npm run clear && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "release": "npm version patch && npm publish"
   },
   "bin": {
     "sg": "/bin/src/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "publishConfig": {
+    "registry": "http://38.12.28.165:4873"
+  },
+  "keywords": [
+    "cli",
+    "vue"
+  ],
+  "files": [
+    "bin"
+  ],
+  "author": "ldz",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-typescript": "^7.24.1",
     "@types/figlet": "^1.5.8",
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^8.2.10",
