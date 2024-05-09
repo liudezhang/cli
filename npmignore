@@ -1,6 +1,5 @@
 .vscode
 node_modules
-src
 .editorconfig
 .gitignore
 package.json
@@ -8,7 +7,6 @@ package.json
 .eslintignore
 .prettierrc.js
 .prettierignore
-.nvmrc
 .nvmrc
 babel.config.*
 tsconfig.json

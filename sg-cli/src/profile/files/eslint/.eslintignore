@@ -1,0 +1,13 @@
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+build/
+bin/
+dist/
+
+.idea/
+*.iml
+*.log
+*.log*

@@ -16,7 +16,6 @@ class Loading {
    */
   start(textOrOptions: string | Options, customOptions?: Options) {
     this.spinner = ora({ text: textOrOptions, ...customOptions } as Options)
-
     this.spinner.start()
   }
 

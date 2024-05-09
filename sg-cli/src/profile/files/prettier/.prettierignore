@@ -1,0 +1,8 @@
+# Ignore the build directory
+build/
+bin/
+dist/
+
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

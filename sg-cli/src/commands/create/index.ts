@@ -136,7 +136,7 @@ export default async function (projectName: string, cmd: any) {
     fs.writeJsonSync(packageJsonPath, packageJson, { spaces: 2 }) // 格式化写入
 
     // 安装依赖
-    chalk.log("开始安装依赖")
+    chalk.log("开始安装依赖", "info")
     execSync(`cd ${projectName} && git init && ${packageManager} install`, {
       stdio: "inherit", // 打印子进程的输出
     })

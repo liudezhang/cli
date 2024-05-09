@@ -1,5 +1,6 @@
-import loading from "@/utils/loading"
-import commandCreate from "./create/index"
+import commandLint from "./lint"
+import commandCreate from "./create"
+import commandTest from "./test"
 
 interface ICommands {
   [key: string]: {
@@ -26,11 +27,12 @@ const commands: ICommands = {
   test: {
     description: "测试",
     options: [],
-    actions: async () => {
-      loading.start("测试")
-      await new Promise((res) => setTimeout(res, 1000))
-      loading.succeed("测试成功")
-    },
+    actions: commandTest,
+  },
+  lint: {
+    description: "添加代码检查配置",
+    options: [],
+    actions: commandLint,
   },
 }
 
