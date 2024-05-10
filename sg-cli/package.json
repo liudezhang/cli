@@ -1,6 +1,6 @@
 {
-  "name": "sgysldz-cli",
-  "version": "0.0.6",
+  "name": "sgys-cli",
+  "version": "0.0.3",
   "description": "快速创建项目",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "clear": "rimraf bin",
     "build": "npm run clear && tsc && tsc-alias && npm run copyProfile",
     "watch": "npm run build && (concurrently \"tsc -w\" \"tsc-alias -w\")",
-    "release": "npm run build && npm version patch && npm publish",
+    "release": "ts-node scripts/release.ts",
     "copyProfile": "ts-node scripts/copyProfile.ts"
   },
   "bin": {
@@ -20,6 +20,10 @@
   "files": [
     "bin"
   ],
+  "readme": "./RealREADME.md",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "author": "ldz",
   "license": "",
   "devDependencies": {
@@ -31,6 +35,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^8.2.10",
     "@types/node": "^20.11.24",
+    "@types/node-fetch": "^2.6.11",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "concurrently": "^8.2.2",
@@ -45,6 +50,7 @@
     "commander": "^12.0.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6",
+    "node-fetch": "2",
     "ora": "^5.4.1",
     "terminal-link": "^3.0.0",
     "tsc-alias": "^1.8.8"

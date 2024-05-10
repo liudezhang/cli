@@ -1,12 +1,9 @@
 import chalk from "chalk"
 
 // keyof Chalk 的类型 并排除 某些类型
-
 type ChalkFnType = keyof Omit<Chalk, "hex" | "bgHex">
 
 class Chalk {
-  constructor() {}
-
   success(text: string) {
     return chalk.green(text)
   }
@@ -53,6 +50,8 @@ class Chalk {
   bgHex(color: string) {
     return chalk.bgHex(color)
   }
+
+
 }
 
 export default new Chalk()
