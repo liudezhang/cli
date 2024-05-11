@@ -20,6 +20,6 @@ async function isAdmin() {
 
 export default async function () {
   const isAdministrator = osPlatform === "linux" ? isRoot() : await isAdmin()
-  !isAdministrator && chalk.log("请使用管理员权限运行", "error")
+  !isAdministrator && console.log(chalk.error("请使用管理员权限运行"))
   return isAdministrator
 }

@@ -2,6 +2,7 @@ import commandLint from "./lint"
 import commandCreate from "./create"
 import commandTest from "./test"
 import commandTemplate from "./template"
+import commandAdd from "./add"
 
 interface ICommands {
   [key: string]: {
@@ -39,6 +40,11 @@ const commands: ICommands = {
     description: "查看项目模板",
     options: [],
     actions: commandTemplate,
+  },
+  add: {
+    description: "添加配置文件",
+    options: [],
+    actions: commandAdd,
   },
 }
 

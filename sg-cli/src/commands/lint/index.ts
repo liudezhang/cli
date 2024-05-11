@@ -21,7 +21,7 @@ const list = [
   // "commitlint",
   // "standard-version",
   // "changelog",
-] as const // as const 用于将数组转换为元组
+] as const
 
 type packageManager = "npm" | "pnpm"
 // config 是 list 的联合类型

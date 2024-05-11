@@ -9,5 +9,20 @@ const prettierConfigJs = requireFile("./files/prettier/prettier.config.js")
 const eslintignore = requireFile("./files/eslint/.eslintignore")
 const prettierignore = requireFile("./files/prettier/.prettierignore")
 const editorconfig = requireFile("./files/editorconfig/.editorconfig")
+const gitignore = requireFile("./files/git/.gitignore")
 
-export { prettierConfigJs, eslintignore, prettierignore, editorconfig }
+export const fileNameMap = {
+  "prettier.config.js": prettierConfigJs,
+  ".eslintignore": eslintignore,
+  ".prettierignore": prettierignore,
+  ".editorconfig": editorconfig,
+  ".gitignore": gitignore,
+}
+
+export {
+  prettierConfigJs,
+  eslintignore,
+  prettierignore,
+  editorconfig,
+  gitignore,
+}
