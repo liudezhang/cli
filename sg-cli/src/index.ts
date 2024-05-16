@@ -20,9 +20,9 @@ Object.keys(commands).forEach((command: string) => {
   cmd.hook(
     "preAction",
     async (thisCommand: Command, actionCommand: Command) => {
-      if (!(await isAdministrator())) {
-        process.exit(1) // 如果不是管理员则退出进程
-      }
+      // if (!(await isAdministrator())) {
+      //   process.exit(1) // 如果不是管理员则退出进程
+      // }
     },
   )
   cmd.description(value.description) // 设置命令描述

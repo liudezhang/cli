@@ -1,6 +1,6 @@
 {
   "name": "sgys-cli",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "快速创建项目",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
   "author": "ldz",
   "license": "",
   "devDependencies": {
-    "@types/figlet": "^1.5.8",
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^8.2.10",
     "@types/node": "^20.11.24",
