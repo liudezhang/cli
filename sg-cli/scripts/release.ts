@@ -1,6 +1,6 @@
 import { execSync } from "child_process"
 import packageJson from "../package.json"
-import fs from "fs-extra"
+import fs from "../src/utils/fs"
 
 try {
   const readme = fs.readFileSync("RealREADME.md", "utf-8")

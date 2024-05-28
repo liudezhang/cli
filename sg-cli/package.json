@@ -1,6 +1,6 @@
 {
   "name": "sgys-cli",
-  "version": "0.0.13",
+  "version": "0.0.1",
   "description": "快速创建项目",
   "main": "index.js",
   "scripts": {
