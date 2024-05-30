@@ -27,8 +27,12 @@ Object.keys(commands).forEach((command: string) => {
   )
   cmd.description(value.description) // 设置命令描述
   // 设置命令选项
-  value.options.forEach((option) => {
+  value.options?.forEach((option) => {
     cmd.option(option.cmd, option.description)
+  })
+  // 设置别名
+  value.alias?.forEach((alias) => {
+    cmd.alias(alias)
   })
   // 设置命令执行动作
   cmd.action(value.actions)

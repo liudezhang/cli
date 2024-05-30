@@ -25,5 +25,8 @@ pnpm-debug.log*
 *.sw?
 
 demo-test
+cz-cli
+./cz-git
+test
 
 **/bin
