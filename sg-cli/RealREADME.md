@@ -29,4 +29,6 @@ sg add # 添加一些配置文件 eslint prettier editorconfig 等
 sg template # 查看模板列表 （模板会随时更新）
 sg create <project-name> # 创建项目
 sg lint # 添加 eslint prettier editorconfig 配置
+sg commit|cz # 交互式生成commit message
+sg help # 查看帮助
 ```

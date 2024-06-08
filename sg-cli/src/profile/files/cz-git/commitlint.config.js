@@ -1,3 +1,4 @@
+/** @type {import('cz-git').UserConfig} */
 module.exports = {
   prompt: {
     messages: {
@@ -52,5 +53,6 @@ module.exports = {
       },
     ],
     useEmoji: true,
+    emojiAlign: "center",
   },
 }

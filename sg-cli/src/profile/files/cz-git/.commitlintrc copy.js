@@ -1,4 +1,4 @@
-/** @type {import('cz-git').UserConfig} */
+/** @type {import('czg').CommitizenGitOptions} */
 module.exports = {
   prompt: {
     messages: {
@@ -53,6 +53,5 @@ module.exports = {
       },
     ],
     useEmoji: true,
-    emojiAlign: "center",
   },
 }

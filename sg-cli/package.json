@@ -1,7 +1,7 @@
 {
-  "name": "sgys-cli",
-  "version": "0.0.1",
-  "description": "快速创建项目",
+  "name": "sgysldz-cli",
+  "version": "1.0.0",
+  "description": "一款可以提高开发效率的脚手架",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ext .ts . --fix && prettier --write .",
@@ -9,8 +9,7 @@
     "build": "npm run clear && tsc && tsc-alias && npm run copyProfile",
     "watch": "npm run build && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "release": "ts-node scripts/release.ts",
-    "copyProfile": "ts-node scripts/copyProfile.ts",
-    "commit": "git-cz"
+    "copyProfile": "ts-node scripts/copyProfile.ts"
   },
   "bin": {
     "sg": "/bin/src/index.js"
@@ -33,29 +32,24 @@
     "@types/node-fetch": "^2.6.11",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
-    "commitizen": "^4.3.0",
     "concurrently": "^8.2.2",
-    "cz-git": "^1.9.2",
     "eslint": "^8.57.0",
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^12.0.0",
+    "commitizen": "^4.3.0",
+    "cz-git": "^1.9.2",
+    "czg": "^1.9.2",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6",
     "lodash-es": "^4.17.21",
     "node-fetch": "2",
-    "ora": "^5.4.1",
-    "tsc-alias": "^1.8.8"
-  },
-  "config": {
-    "commitizen": {
-      "path":   "cz-git",
-      "czConfig":"./commitlint.config.js"
-    }
+    "ora": "^5.4.1"
   }
 }

@@ -1,27 +1,47 @@
-import path from "node:path"
-import fs from "@/utils/fs"
-
-function loaderConfig(path: string) {
-  try {
-    // return fs.readFileSync(path, { encoding: "utf-8" })
-    return require(path)
-  } catch (error) {
-    return {}
-  }
-}
-
-const defaultConfig = path.resolve(
-  __dirname,
-  "../../profile/files/cz-git/commitlint.config.js",
-)
+import inquirer from "inquirer"
+import { commitPrompt, commitTemplate } from "./config"
+import { execSync } from "child_process"
 
 export default async function () {
-  const configObj = loaderConfig(defaultConfig)
-  console.log(configObj)
+  console.log("commit")
 
-  // 根据 configObj 中的配置进行 commitlint 配置
+  const answers = await inquirer.prompt(commitPrompt)
+  const commitMessage = commitTemplate(answers)
+  console.log(commitMessage)
+  const { isUpdateCommitMessage } = await inquirer.prompt({
+    type: "confirm",
+    name: "isUpdateCommitMessage",
+    message: `是否修改提交信息\n`,
+    default: false,
+  })
+  let commitMessageTemp = null
+  if (isUpdateCommitMessage) {
+    await inquirer
+      .prompt({
+        type: "editor",
+        name: "updateCommitMessage",
+        message: "修改提交信息",
+        default: commitMessage,
+      })
+      .then(({ updateCommitMessage }) => {
+        commitMessageTemp = updateCommitMessage
+      })
+  }
 
-  console.log("自定义commitlint模块的")
+  const commitMessageFinal = commitMessageTemp || commitMessage
 
-  process.exit()
+  inquirer
+    .prompt({
+      type: "confirm",
+      name: "isCommit",
+      message: `是否提交`,
+      default: true,
+    })
+    .then(({ isCommit }) => {
+      if (isCommit) {
+        execSync(`git commit -m "${commitMessageFinal}"`, {
+          stdio: "inherit",
+        })
+      }
+    })
 }

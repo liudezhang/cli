@@ -8,7 +8,10 @@ try {
   const newReadme = readme.replace(/"""{{packageName}}"""/g, packageJson.name)
   fs.writeFileSync("README.md", newReadme)
 
-  execSync("npm run build && npm version patch && npm publish", {
+  // patch   # 小版本更新
+  // minor   # 中版本更新
+  // major   # 大版本更新
+  execSync("npm run build && npm version major && npm publish", {
     stdio: "inherit",
   })
 
@@ -19,8 +22,4 @@ try {
 } catch (error) {
   console.error(error)
   process.exit(1)
-
-
-
-
 }

@@ -1,1 +1,1 @@
-declare module 'commitizen/dist/cli/git-cz';
+declare module "commitizen/dist/cli/git-cz.js"

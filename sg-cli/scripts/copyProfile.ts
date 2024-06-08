@@ -6,7 +6,11 @@ import fs from "../src/utils/fs"
 
 fs.copySync("./src/profile/files", "./bin/src/profile/files")
 
-const packageList = ["commitizen", "cz-git"]
-packageList.forEach((item: string) => {
-  fs.copySync(`./node_modules/${item}`, `./bin/node_modules/${item}`)
-})
+// const lib = ["commitizen", "cz-git"]
+// lib.forEach((item) => {
+//   if (fs.existsSync(`./node_modules/${item}`)) {
+//     fs.copySync(`./node_modules/${item}`, `./bin/node_modules/${item}`, {
+//       dereference: true,
+//     })
+//   }
+// })
