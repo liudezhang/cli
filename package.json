@@ -1,5 +1,5 @@
 {
-  "name": "sgysldz-cli",
+  "name": "sgys-cli",
   "version": "2.0.0",
   "description": "一款可以提高开发效率的脚手架",
   "main": "index.js",
