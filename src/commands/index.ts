@@ -4,6 +4,7 @@ import commandTest from "./test"
 import commandTemplate from "./template"
 import commandAdd from "./add"
 import commandCommit from "./commit"
+import commandGitkeep from "./gitkeep"
 
 interface ICommands {
   [key: string]: {
@@ -18,6 +19,11 @@ interface ICommands {
 }
 
 const commands: ICommands = {
+  test: {
+    description: "测试",
+    options: [],
+    actions: commandTest,
+  },
   "create <project-name>": {
     description: "创建一个新项目",
     options: [
@@ -27,11 +33,6 @@ const commands: ICommands = {
       },
     ],
     actions: commandCreate,
-  },
-  test: {
-    description: "测试",
-    options: [],
-    actions: commandTest,
   },
   lint: {
     description: "添加代码检查配置",
@@ -53,6 +54,24 @@ const commands: ICommands = {
     options: [],
     alias: ["cz"],
     actions: commandCommit,
+  },
+  gitkeep: {
+    description: ".gitkeep文件",
+    options: [
+      {
+        cmd: "-a",
+        description: "给当前目录下的所有空目录创建.gitkeep文件",
+      },
+      {
+        cmd: "-d",
+        description: "检查当前目录下的所有非空目录删除.gitkeep文件",
+      },
+      {
+        cmd: "-r",
+        description: "检查当前目录下的所有目录删除.gitkeep文件",
+      },
+    ],
+    actions: commandGitkeep,
   },
 }
 

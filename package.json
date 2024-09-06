@@ -27,6 +27,7 @@
   "license": "",
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
+    "@types/gitignore-parser": "^0.0.3",
     "@types/inquirer": "^8.2.10",
     "@types/node": "^20.11.24",
     "@types/node-fetch": "^2.6.11",
@@ -44,9 +45,9 @@
     "chalk": "^4.1.2",
     "commander": "^12.0.0",
     "commitizen": "^4.3.0",
-    "cz-git": "^1.9.2",
     "czg": "^1.9.2",
     "fs-extra": "^11.2.0",
+    "gitignore-parser": "^0.0.2",
     "inquirer": "^8.2.6",
     "lodash-es": "^4.17.21",
     "node-fetch": "2",
