@@ -11,9 +11,13 @@ try {
   // patch   # 小版本更新
   // minor   # 中版本更新
   // major   # 大版本更新
-  execSync("npm run build && npm version patch && npm publish", {
-    stdio: "inherit",
-  })
+  // --no-git-tag-version 禁止自动打tag
+  execSync(
+    "npm run build && npm version patch --no-git-tag-version && npm publish",
+    {
+      stdio: "inherit",
+    },
+  )
 
   // 发布成功后删除 README.md
   fs.removeSync("README.md")
