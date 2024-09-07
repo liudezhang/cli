@@ -1,109 +1,111 @@
 import fs from "@/utils/fs"
 import path from "path"
+import { compile } from "gitignore-parser"
 
-function createGitkeepInEmptyDirs(dirPath: string, ignorePatterns: string[]) {
-  const files = fs.readdirSync(dirPath, { withFileTypes: true })
+type tCompile = {
+  accepts(input: string): boolean
+  denies(input: string): boolean
+  maybe(input: string): boolean
+}
+
+/**
+ * 递归处理目录，根据回调函数执行具体操作
+ * @param dirPath 目录路径
+ * @param gitignore 忽略的目录名称列表
+ * @param callback 回调函数，处理每个目录的操作
+ */
+function processDirectories(
+  dirPath: string,
+  gitignore: tCompile,
+  callback: (fullPath: string, isEmpty: boolean) => void,
+) {
+  let files = fs.readdirSync(dirPath, { withFileTypes: true })
+
+  files = files.filter((file) => gitignore.accepts(file.name))
+
   files.forEach((file) => {
     const fullPath = path.join(dirPath, file.name)
 
-    // 如果是目录且不在忽略列表中
-    if (file.isDirectory() && !ignorePatterns.includes(file.name)) {
-      // 递归检查子目录
-      createGitkeepInEmptyDirs(fullPath, ignorePatterns)
+    if (file.isDirectory()) {
+      processDirectories(fullPath, gitignore, callback)
 
-      // 检查当前目录是否为空
       const subFiles = fs.readdirSync(fullPath, { withFileTypes: true })
-      if (subFiles.length === 0) {
-        // 创建 .gitkeep 文件
-        fs.writeFileSync(path.join(fullPath, ".gitkeep"), "*")
-        console.log(`${fullPath} 为空文件夹, 创建 .gitkeep`)
-      }
+      const isEmpty = subFiles.length === 0
+      callback(fullPath, isEmpty)
     }
   })
 }
 
-function removeGitkeepNotEmptyDirs(dirPath: string, ignorePatterns: string[]) {
-  const files = fs.readdirSync(dirPath, { withFileTypes: true })
-  files.forEach((file) => {
-    const fullPath = path.join(dirPath, file.name)
+/**
+ * 在所有空目录中创建 .gitkeep 文件
+ * @param dirPath 目录路径
+ * @param gitignore 忽略的目录名称列表
+ */
+function createGitkeepInEmptyDirs(dirPath: string, gitignore: tCompile) {
+  processDirectories(dirPath, gitignore, (fullPath, isEmpty) => {
+    if (isEmpty) {
+      fs.writeFileSync(path.join(fullPath, ".gitkeep"), "*")
+      console.log(`${fullPath} 是空目录, 已创建 .gitkeep 文件`)
+    }
+  })
+}
 
-    // 如果是目录且不在忽略列表中
-    if (file.isDirectory() && !ignorePatterns.includes(file.name)) {
-      // 递归检查子目录
-      removeGitkeepNotEmptyDirs(fullPath, ignorePatterns)
+/**
+ * 删除所有非空目录中的 .gitkeep 文件
+ * @param dirPath 目录路径
+ * @param gitignore 忽略的目录名称列表
+ */
+function removeGitkeepFromNonEmptyDirs(dirPath: string, gitignore: tCompile) {
+  processDirectories(dirPath, gitignore, (fullPath, isEmpty) => {
+    if (!isEmpty) {
+      // 读取 fullPath 目录下的文件
+      let files = fs.readdirSync(fullPath)
+      files = files.filter((file) => file !== ".gitkeep")
+      if (files.length !== 0) {
+        const gitkeepPath = path.join(fullPath, ".gitkeep")
 
-      // 检查当前目录排除 .gitkeep 是否为空
-      const subFiles = fs
-        .readdirSync(fullPath)
-        .filter((file) => file !== ".gitkeep")
-
-      // 如果当前目录不为空
-      if (subFiles.length !== 0) {
-        if (fs.existsSync(path.join(fullPath, ".gitkeep"))) {
-          fs.removeSync(path.join(fullPath, ".gitkeep"))
-          console.log(`${fullPath} 不是空文件夹, 删除 .gitkeep 文件`)
+        if (fs.existsSync(gitkeepPath)) {
+          fs.removeSync(gitkeepPath)
+          console.log(`${fullPath} 不是空目录，已删除 .gitkeep 文件`)
         }
       }
     }
   })
 }
 
-function removeGitkeepDirs(dirPath: string, ignorePatterns: string[]) {
-  // 删除当前目录下的所有子目录的 .gitkeep 文件
-  const files = fs.readdirSync(dirPath, { withFileTypes: true })
-  files.forEach((file) => {
-    const fullPath = path.join(dirPath, file.name)
-
-    // 如果是目录且不在忽略列表中
-    if (file.isDirectory() && !ignorePatterns.includes(file.name)) {
-      // 递归检查子目录
-      removeGitkeepDirs(fullPath, ignorePatterns)
-
-      if (fs.existsSync(path.join(fullPath, ".gitkeep"))) {
-        fs.removeSync(path.join(fullPath, ".gitkeep"))
-        console.log(`${fullPath}, 删除 .gitkeep 文件`)
-      }
+/**
+ * 删除所有目录中的 .gitkeep 文件
+ * @param dirPath 目录路径
+ * @param gitignore 忽略的目录名称列表
+ */
+function removeAllGitkeepFiles(dirPath: string, gitignore: tCompile) {
+  processDirectories(dirPath, gitignore, (fullPath) => {
+    const gitkeepPath = path.join(fullPath, ".gitkeep")
+    if (fs.existsSync(gitkeepPath)) {
+      fs.removeSync(gitkeepPath)
+      console.log(`已删除 ${fullPath} 中的 .gitkeep 文件`)
     }
   })
 }
 
-// 解析 .gitignore 文件 生成忽略列表
-function parseGitignore(gitignorePath: string) {
-  const content = fs.readFileSync(gitignorePath, "utf-8")
-  // 这里简单地将每一行视为一个要忽略的目录名，不考虑通配符等
-  return content
-    .split(/\r?\n/)
-    .filter((line) => line.trim() && !line.trim().startsWith("#"))
-}
-
-// -a 给当前目录下的所有空文件夹 递归生成 .gitkeep
-// 排除 .gitignore 文件中的文件夹规则
-export default function (cmd: { a?: boolean; d?: boolean; r?: boolean }) {
-  // 获取当前目录
+/**
+ * 根据命令行参数执行相应操作
+ * @param cmd 命令行参数
+ */
+export default function (cmd: any) {
   const cwd = process.cwd()
-
   const gitignorePath = path.join(cwd, ".gitignore")
 
-  if (Object.keys(cmd).length && !fs.existsSync(gitignorePath)) {
-    console.log(".gitignore 文件不存在")
-    return
-  }
-
-  const ignorePatterns = parseGitignore(gitignorePath)
+  const gitignore = compile(fs.readFileSync(gitignorePath, "utf-8"))
 
   if (cmd.a) {
-    createGitkeepInEmptyDirs(cwd, ignorePatterns)
-  }
-
-  if (cmd.d) {
-    removeGitkeepNotEmptyDirs(cwd, ignorePatterns)
-  }
-
-  if (cmd.r) {
-    removeGitkeepDirs(cwd, ignorePatterns)
-  }
-
-  if (!Object.keys(cmd).length) {
+    createGitkeepInEmptyDirs(cwd, gitignore)
+  } else if (cmd.d) {
+    removeGitkeepFromNonEmptyDirs(cwd, gitignore)
+  } else if (cmd.r) {
+    removeAllGitkeepFiles(cwd, gitignore)
+  } else if (!Object.keys(cmd).length) {
     fs.writeFileSync(path.join(cwd, ".gitkeep"), "*")
+    console.log("已在当前目录中创建 .gitkeep 文件")
   }
 }
