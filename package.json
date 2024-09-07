@@ -1,6 +1,6 @@
 {
   "name": "sgys-cli",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "一款可以提高开发效率的脚手架",
   "main": "index.js",
   "scripts": {
